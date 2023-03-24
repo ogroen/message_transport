@@ -1,0 +1,21 @@
+{
+    "name": "ogroen/message_transport",
+    "description": "MessageTransport package",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ogroen\\MessageTransport\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "damir",
+            "email": "insomnia.kzn@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ogroen/messages": "*"
+    }
+}
