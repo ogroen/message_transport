@@ -16,6 +16,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "ogroen/messages": "*"
+        "ogroen/messages": "*",
+        "guzzlehttp/guzzle": "^7.0"
     }
 }
