@@ -40,7 +40,9 @@ class HttpTransport implements MessageTransportInterface
 
     public function receive(string $request): Message
     {
-        $message = Message::deserialize($request);
+        $a = json_decode($request, true);
+
+        $message = Message::deserialize(json_encode($a['body']));
 
         $this->log(sprintf("Receive message - '{$request}'"));
 
