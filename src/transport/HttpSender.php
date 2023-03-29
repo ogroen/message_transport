@@ -3,10 +3,10 @@
 namespace Ogroen\MessageTransport\transport;
 
 use GuzzleHttp\Client;
-use Ogroen\Messages\Message;
-use Ogroen\MessageTransport\MessageTransportInterface;
+use Ogroen\MessageTransport\MessageSerializer;
+use Ogroen\MessageTransport\MessageSenderInterface;
 
-class HttpTransport implements MessageTransportInterface
+class HttpSender implements MessageSenderInterface
 {
     private $url;
     private $login;
@@ -15,18 +15,23 @@ class HttpTransport implements MessageTransportInterface
      * @var Client
      */
     private $httpClient;
+    /**
+     * @var MessageSerializer
+     */
+    private $serializer;
 
-    public function __construct(Client $httpClient, $params)
+    public function __construct(MessageSerializer $serializer, Client $httpClient, $params)
     {
         $this->url = $params['url'];
         $this->login = $params['login'];
         $this->password = $params['password'];
         $this->httpClient = $httpClient;
+        $this->serializer = $serializer;
     }
 
-    public function send(Message $message) : void
+    public function send($message) : void
     {
-        $json = $message->serialize();
+        $json = $this->serializer->serialize($message);
 
         $postData = [
             'message' => [
@@ -35,18 +40,10 @@ class HttpTransport implements MessageTransportInterface
             ]
         ];
 
-        $this->httpClient->post($this->url, ['form_params' => $postData]);
-    }
-
-    public function receive(string $request): Message
-    {
-        $a = json_decode($request, true);
-
-        $message = Message::deserialize($a['body']);
-
-        $this->log(sprintf("Receive message - '{$request}'"));
-
-        return $message;
+        $this->httpClient->post($this->url, [
+            'form_params' => $postData,
+            'auth' => [$this->login, $this->password]
+        ]);
     }
 
     protected function log($message)

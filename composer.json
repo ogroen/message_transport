@@ -16,7 +16,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "ogroen/messages": "*",
         "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10"
     }
 }
